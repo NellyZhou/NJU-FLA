@@ -32,7 +32,7 @@ public:
     char blank_symbol;
     vector<string> final_state_group;
     int tape_number;
-    const string delta_function_file = "delta_function.in";
+    char delta_function_file[];
     
     Parser();
     Parser(string prog_filename);
