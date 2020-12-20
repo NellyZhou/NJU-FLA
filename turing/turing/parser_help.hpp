@@ -10,7 +10,6 @@
 
 #include "my_exception.h"
 #include <stdio.h>
-#include <string>
 #include <sstream>
 #define concat2(a,b) a ## b
 using namespace std;

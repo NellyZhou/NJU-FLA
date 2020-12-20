@@ -8,10 +8,13 @@
 #ifndef TM_parser_hpp
 #define TM_parser_hpp
 
-#include <stdio.h>
-#include <vector>
-#include <string>
 #include "parser_help.hpp"
+#include <vector>
+#include <fstream>
+#include <unistd.h>
+#include <regex>
+#include <stdlib.h>
+
 using namespace std;
 
 #define func_about_variable(name) \
@@ -32,6 +35,7 @@ public:
     char blank_symbol;
     vector<string> final_state_group;
     int tape_number;
+    int delta_function_fd;
     char delta_function_file[];
     
     Parser();
@@ -41,8 +45,16 @@ public:
     func_about_variable(clean_)
     func_about_variable(parse_)
     
+    
     vector<string> transition_function(string old_state, string old_symbols);
+    //void write_temp_file(char* buffer, int length);
+    //char* read_rule_line(int* length, int index);
+    //int transition_number();
+
+    
     void show();
+    
+    ~Parser();
 };
 
 #endif /* TM_parser_hpp */

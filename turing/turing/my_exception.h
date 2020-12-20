@@ -7,9 +7,11 @@
 
 #ifndef my_exception_h
 #define my_exception_h
-using namespace std;
+
 #include <string>
 #include <iostream>
+
+using namespace std;
 
 class MyException{
     string msg;
@@ -21,7 +23,7 @@ public:
     MyException(string x){
         msg = x;
     }
-
+    
     void what(){
         cout << msg << endl;
         exit(0);
