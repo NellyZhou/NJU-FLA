@@ -47,12 +47,13 @@ public:
     
     
     vector<string> transition_function(string old_state, string old_symbols);
+    // new symbols ## direction ## state
     void write_temp_file(char* buffer, int length);
     char* read_rule_line(int* length, int index);
     int transition_number();
     bool is_in_input_symbols(char ch);
-
-    
+    void initial_transition_file();
+    void show_transition_rule();
     void show();
     
     ~Parser();

@@ -13,5 +13,9 @@ turing : TM_parser.o TM_simulator.o main.o
 clean : 
 	rm -rf TM_parser.o TM_simulator.o main.o turing
 
+update:
+	make clean
+	make turing
+
 
 

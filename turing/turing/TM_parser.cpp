@@ -44,6 +44,7 @@ Parser::Parser(string prog_name){
     strcpy(delta_function_file,"/tmp/temp_file.XXXXXX");
     delta_function_fd = mkstemp(delta_function_file);
     unlink(delta_function_file);
+    initial_transition_file();
     
     while (!in_file.fail()){
         string line_str;
@@ -56,8 +57,13 @@ Parser::Parser(string prog_name){
 
 void Parser::parse_certain_line(string line){
     try{
-        if (line[0] != '#')
+        if (line[0] != '#'){
+            char* tmp_str = (char*)malloc(sizeof(char) * line.length());
+            strcpy(tmp_str, line.c_str());
+            //printf("%s %d\n",tmp_str, strlen(tmp_str));
+            write_temp_file(tmp_str, line.length());
             return;
+        }
         if (line.length() >= 2){
             switch (line[1]) {
                 case 'Q': clean_Q(line); break;
@@ -89,9 +95,17 @@ void Parser::write_temp_file(char* buffer, int length) {
     lseek(fd, 0, SEEK_SET);
     int tmp_len;
     read(fd, &tmp_len, sizeof(tmp_len));
+    //printf("Write rule: %d\n",tmp_len);
     
     lseek(fd, 0, SEEK_SET);
     int len = tmp_len + 1;
+    write(fd, &len, sizeof(len));
+}
+
+void Parser::initial_transition_file(){
+    int fd = delta_function_fd;
+    lseek(fd, 0, SEEK_SET);
+    int len = 0;
     write(fd, &len, sizeof(len));
 }
 
@@ -114,10 +128,10 @@ char* Parser::read_rule_line(int* length, int index){
         lseek(fd, tmp_len, SEEK_CUR);
     }
     
-    int ans_len;
-    read(fd, &ans_len, sizeof(ans_len));
-    char* buffer = (char*)malloc(ans_len);
-    read(fd, buffer, ans_len);
+    read(fd, length, sizeof(int));
+    char* buffer = (char*)malloc(*length + 1);
+    read(fd, buffer, *length);
+    buffer[*length] = '\0';
     return buffer;
 }
 
@@ -126,6 +140,7 @@ int Parser::transition_number(){
     int n = 0;
     lseek(fd, 0, SEEK_SET);
     read(fd, &n, sizeof(n));
+    //printf("N: %d\n",n);
     return n;
 }
 
@@ -135,12 +150,13 @@ vector<string> Parser::transition_function(string old_state, string old_symbols)
     for (int i = 0; i < n; i++){
         int line_len = 0;
         char* transition_line = read_rule_line(&line_len, i);
-        char* tokenPtr = strtok(transition_line," ");
-        while (tokenPtr != NULL){
-            string str = tokenPtr;
+        string str = transition_line;
+        istringstream in(str);
+        ans_set.clear();
+        while (in >> str){
             ans_set.push_back(str);
-            tokenPtr = strtok(NULL," ");
         }
+
         if (old_state != ans_set.front()){
             ans_set.clear();
             continue;;
@@ -185,6 +201,27 @@ bool Parser::is_in_input_symbols(char ch){
             return true;
     }
     return false;
+}
+
+void Parser::show_transition_rule(){
+    vector<string> ans_set;
+    int n = transition_number();
+    for (int i = 0; i < n; i++){
+        int line_len = 0;
+        char* transition_line = read_rule_line(&line_len, i);
+        printf("\nRule:%s        %d\n",transition_line, line_len);
+        string str = transition_line;
+        istringstream in(str);
+        ans_set.clear();
+        while (in >> str){
+            ans_set.push_back(str);
+        }
+        printf("After:\n");
+        for (int j = 0; j < ans_set.size();j++){
+            printf("%s  ",ans_set[j].c_str());
+        }
+        printf("\n");
+    } 
 }
 
 Parser::~Parser(){
