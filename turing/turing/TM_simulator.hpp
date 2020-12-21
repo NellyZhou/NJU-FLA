@@ -27,7 +27,7 @@ public:
     vector<Node*> tape_rightmost;
     
     Simulator();
-    Simulator(Parser* tm_parser);
+    Simulator(Parser* tm_parser, string input);
     bool input_verification(string input);
     void tm_next_step();
     bool is_tm_halt();

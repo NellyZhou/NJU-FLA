@@ -26,7 +26,7 @@ public:
     
     void what(){
         cout << msg << endl;
-        exit(0);
+        exit(1);
     }
 
 };

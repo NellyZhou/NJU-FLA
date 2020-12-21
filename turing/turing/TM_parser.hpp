@@ -47,9 +47,10 @@ public:
     
     
     vector<string> transition_function(string old_state, string old_symbols);
-    //void write_temp_file(char* buffer, int length);
-    //char* read_rule_line(int* length, int index);
-    //int transition_number();
+    void write_temp_file(char* buffer, int length);
+    char* read_rule_line(int* length, int index);
+    int transition_number();
+    bool is_in_input_symbols(char ch);
 
     
     void show();

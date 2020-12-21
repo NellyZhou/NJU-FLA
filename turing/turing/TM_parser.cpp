@@ -38,7 +38,7 @@ using namespace std;
 
 Parser::Parser(string prog_name){
     fstream in_file;
-    string file_pwd = "/users/zhouxinyu/workspace/fla_project/turing/turing/";
+    string file_pwd = "./";
     in_file.open(file_pwd + prog_name);
     
     strcpy(delta_function_file,"/tmp/temp_file.XXXXXX");
@@ -77,7 +77,7 @@ void Parser::parse_certain_line(string line){
         err.what();
     }
 }
-/*
+
 
 void Parser::write_temp_file(char* buffer, int length) {
     int fd = delta_function_fd;
@@ -135,7 +135,7 @@ vector<string> Parser::transition_function(string old_state, string old_symbols)
     for (int i = 0; i < n; i++){
         int line_len = 0;
         char* transition_line = read_rule_line(&line_len, i);
-        char* tokenPtr = strtok(*transition_line," ");
+        char* tokenPtr = strtok(transition_line," ");
         while (tokenPtr != NULL){
             string str = tokenPtr;
             ans_set.push_back(str);
@@ -155,13 +155,36 @@ vector<string> Parser::transition_function(string old_state, string old_symbols)
     }
     return ans_set;
 }
-*/
+
 
 void Parser::show(){
     printf("State_group:\n");
     for (int i = 0; i < state_group.size(); i++){
         cout<<'\t'<<state_group[i]<<endl;
     }
+
+    printf("Input_symbols_group:\n");
+    for (int i = 0; i < input_symbol_group.size(); i++){
+        cout<<'\t'<<input_symbol_group[i]<<endl;
+    }
+
+    printf("Tape_symbols:\n");
+    for (int i = 0; i < tape_symbol_group.size(); i++){
+        cout<<'\t'<<tape_symbol_group[i]<<endl;
+    }
+
+    printf("Final_states:\n");
+    for (int i = 0; i < final_state_group.size(); i++){
+        cout<<'\t'<<final_state_group[i]<<endl;
+    }
+}
+
+bool Parser::is_in_input_symbols(char ch){
+    for (int i = 0; i < input_symbol_group.size(); i++){
+        if (input_symbol_group[i] == ch)
+            return true;
+    }
+    return false;
 }
 
 Parser::~Parser(){
