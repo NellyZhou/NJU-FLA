@@ -25,18 +25,22 @@ public:
     int tape_num;
     string cur_state;
     vector<Node*> tape_head;
-    vector<Node*> tape_leftmost;
-    vector<Node*> tape_rightmost;
+    vector<Node*> tape_most;
+    //vector<Node*> tape_rightmost;
+    vector<Node*> tape_zero;
     bool is_halt;
+    bool is_verbose;
     
     Simulator();
-    Simulator(Parser* tm_parser, string input);
+    Simulator(Parser* tm_parser, string input, bool flag);
     void build_tape(int index, string content);
     bool input_verification(string input);
     void tm_next_step();
     void tm_start();
     string get_symbols();
     void tape_result(int index);
+    void show_step_info(int steps);
+    void show_final_result();
 };
 
 
