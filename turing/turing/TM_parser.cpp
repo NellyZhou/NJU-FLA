@@ -49,6 +49,9 @@ Parser::Parser(string prog_name){
     while (!in_file.fail()){
         string line_str;
         getline(in_file, line_str);
+        if (line_str.find(';') != string::npos){
+            line_str = line_str.substr(0, line_str.find(';'));
+        }
         if (!line_str.empty() && line_str[0] != ';'){
             parse_certain_line(line_str);
         }

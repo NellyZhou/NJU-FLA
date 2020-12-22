@@ -25,7 +25,8 @@ public:
     }
     
     void what(){
-        cout << msg << endl;
+        //cout << msg << endl;
+        fprintf(stderr,"%s\n",msg.c_str());
         exit(1);
     }
 
