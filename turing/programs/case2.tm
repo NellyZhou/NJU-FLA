@@ -12,14 +12,16 @@
 
 #F = {halt_accept}
 
-
 ; state 0: start state
 0 1__ 1__ *** cp_1
 0 x__ x__ *** cp_reject
 0 =__ =__ *** cp_reject
 0 ___ ___ *** reject ; empty input
 
-; State cp: copy the string last a^k b^l to the 2nd tape
+
+; Input form 1^n x 1^m = 1^x
+; State cp*: currently, input is in form of *
+; Meanwhile, copy 1^n1^m in 3rd tape and 1^x in the 2nd tape
 cp_1 1__ 1_1 r*r cp_1
 cp_1 =__ =__ r** cp_reject
 cp_1 x__ x__ r** cp_1x
@@ -40,7 +42,7 @@ cp_1x1= =__ =__ r** cp_reject
 cp_1x1= x__ x__ r** cp_reject
 cp_1x1= ___ ___ lll reject
 
-cp_ans 1__ 11_ rr* cp_ans
+cp_ans 1__ 11_ rr* cp_ans           ; ans means in form of 1x1=1
 cp_ans =__ =__ r** cp_reject
 cp_ans x__ x__ r** cp_reject
 cp_ans ___ ___ l** mh
@@ -62,13 +64,13 @@ cmp __1 ___ **l reject
 cmp _1_ ___ *l* reject
 cmp ___ ___ *** accept
 
-; State accept: 
+; State accept: write 'true' on 1st tape
 accept ___ t__ r** accept2
 accept2 ___ r__ r** accept3
 accept3 ___ u__ r** accept4
 accept4 ___ e__ r** halt_accept
 
-; State reject:
+; State reject: write 'false' on 1st tape
 reject 1__ ___ l** reject
 reject 1_1 ___ l*l reject
 reject 11_ ___ ll* reject

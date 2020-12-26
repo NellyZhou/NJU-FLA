@@ -18,7 +18,12 @@
 0 b_ b_ ** cp_reject
 0 __ __ ** reject ; empty input
 
-; State cp: copy the string last a^k b^l to the 2nd tape
+; Next, copy the last a^k b^l to the 2nd tape
+; state cp_a: string a^i
+; state cp_ab: string a^i b^j
+; state cp_aba: string a^i b^j a^k
+; state cp_abab: string a^i b^j a^k b^l
+; state cp_reject: string is not in form of abab, but still have symbols on tape
 cp_a a_ a_ r* cp_a
 cp_a b_ b_ r* cp_ab
 cp_a __ __ ll reject
@@ -44,7 +49,9 @@ mh_1 ab ab l* mh_1
 mh_1 bb bb l* mh_1
 mh_1 _b _b rr cc_a
 
-; State cc: copy the string first a^i b^j to the 2nd tape
+; Following, copy the string first a^i b^j to the 2nd tape
+; state cc_a: currently copy in form of a^i
+; state cc_ab: currently copy in form of a^i b^j
 cc_a a_ aa rr cc_a
 cc_a b_ bb rr cc_ab
 cc_ab b_ bb rr cc_ab
@@ -62,14 +69,14 @@ cmp ab __ ll reject
 cmp ba __ ll reject
 cmp __ __ ** accept
 
-; State accept: 
+; State accept: write 'true' on 1st tape
 accept __ t_ r* accept2
 accept2 __ r_ r* accept3
 accept3 __ u_ r* accept4
 accept4 __ e_ r* halt_accept
 
 
-; State reject:
+; State reject: write 'false' on 1st tape
 reject aa __ ll reject
 reject ab __ ll reject
 reject ba __ ll reject
@@ -83,9 +90,3 @@ reject2 __ a_ r* reject3
 reject3 __ l_ r* reject4
 reject4 __ s_ r* reject5
 reject5 __ e_ ** halt_reject
-
-
-
-
-
-
