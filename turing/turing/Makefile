@@ -9,13 +9,18 @@ main.o : main.cpp TM_parser.hpp TM_simulator.hpp
 
 turing : TM_parser.o TM_simulator.o main.o
 	g++ TM_parser.o TM_simulator.o main.o -o turing
+	sudo cp -r /home/nelly/Workspace/FLA_project/NJU-FLA/turing/turing/turing /bin
 
 clean : 
-	rm -rf TM_parser.o TM_simulator.o main.o turing
+	rm TM_parser.o TM_simulator.o main.o
 
 update:
 	make clean
+	sudo rm turing
 	make turing
+	sudo rm /bin/turing
+	sudo cp -r /home/nelly/Workspace/FLA_project/NJU-FLA/turing/turing/turing /bin
+
 
 
 

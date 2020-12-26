@@ -38,8 +38,11 @@ using namespace std;
 
 Parser::Parser(string prog_name){
     fstream in_file;
-    string file_pwd = "./";
-    in_file.open(file_pwd + prog_name);
+    in_file.open(prog_name);
+    if (in_file.fail()){
+        MyException err("FILE not exits.");
+        err.what();
+    }
     
     strcpy(delta_function_file,"/tmp/temp_file.XXXXXX");
     delta_function_fd = mkstemp(delta_function_file);
@@ -61,10 +64,11 @@ Parser::Parser(string prog_name){
 void Parser::parse_certain_line(string line){
     try{
         if (line[0] != '#'){
-            char* tmp_str = (char*)malloc(sizeof(char) * line.length());
+            char* tmp_str = (char*)malloc(sizeof(char) * (line.length() + 1));
             strcpy(tmp_str, line.c_str());
             //printf("%s %d\n",tmp_str, strlen(tmp_str));
             write_temp_file(tmp_str, line.length());
+            free(tmp_str);
             return;
         }
         if (line.length() >= 2){
